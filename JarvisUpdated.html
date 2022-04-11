@@ -1,0 +1,464 @@
+<!doctype html>
+<html>
+<head>
+ <title>Jarvis</title>
+<style>
+body {
+ text-align: center;
+}
+
+.motherclass {
+border-radius: 10px;
+background-color: lightBlue;
+height: 100%;
+border: solid black;
+width: 99%;
+padding-left: 3px;
+padding-top: 10px;
+max-height:600px;
+}
+
+.motherboard {
+overflow:scroll;
+height:400px;
+}
+
+.sendmsg {
+font-size: 20px;
+font-weight: bold;
+background-color: white;
+color: black;
+outline: none;
+border: solid 1px black;
+border-radius: 10px;
+height: 35px;
+width: 15%;
+margin-top: 0px;
+}
+
+.text {
+margin-top: 0px;
+margin-bottom: 2px;
+display: inline-block;
+height: 30px;
+border: solid 1px black;
+width: 70%;
+border-radius: 4px;
+outline:none;
+font-weight: bold;
+padding-left: 20px;
+background-color: white;
+}
+
+.me {
+display:table;
+text-align: left;
+margin-top: 2px;
+margin: 0 8px -15px 0;
+max-width:50%;
+background-color: green;
+color: white;
+border-radius:4px 0px 4px 4px;
+padding-left: 10px;
+padding-right: 10px;
+}
+
+.reply {
+margin-top: 2px;
+margin-bottom: -15px;
+margin-left: 8px;
+max-width:50%;
+display: table;
+background-color: white;
+border-radius:0 4px 4px 4px;
+padding-left: 10px;
+padding-right: 5px;
+}
+
+.settings,.heading {
+font-weight: bold;
+font-size: 30px;
+background-color: white;
+}
+
+.settings {
+position: relative;
+right: 25%;
+}
+
+.heading {
+position: relative;
+left: 25%;
+background-color: white;
+border-radius: 20px;
+}
+
+.sets {
+position: absolute;
+right: 20px;
+font-weight: bold;
+background-color: yellow;
+border-radius: 4px;
+font-size: 20px;
+width: 150px;
+box-shadow: 4px 4px 5px ;
+}
+</style>
+</head>
+<body>
+<!doctype html>
+<html>
+<head>
+ <title>Jarvis</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body onclick="offf()">
+<div style="border:solid;border-radius:5px; background-color:white;">
+<span class="settings">Jarvis</span><span class="heading" onclick="openset()" id="setting">⚙️</span>
+<div class="sets"><p onclick="dark()" id="setss">Dark mode</p><p id="turnon">Turn on Jarvis</p></div>
+</div>
+<br>
+<center>
+<div class="motherclass">
+<div id="mother" align="left" class="motherboard">
+<div align="right"><p class="me" style="color:white;">🚧Website under development!</p></div>
+<br>
+<div class="reply">I am Jarvis 👋</div>
+<br>
+<div class="reply">Try saying<br> ..."tic tac toe"!</div>
+</div>
+<br>
+<input id="startmsg" class="text" type="value" placeholder="Start conversation..." oninput="speechtext()">
+<button onclick="sendit()" class="sendmsg" id="mic">🎤</button>
+</div>
+</center>
+<br>
+<br>
+<br>
+<u style="color:red" onclick="contact()">Contact us!</u>
+<br>
+<a id="call" style="display:none;" href="tel:8857056435"></a>
+<a href="https://wa.me/" id="whatsapp" style="display:none"></a>
+ <script src="script.js"></script>
+</body>
+</html>
+ <script>
+//Contact us code.
+function contact() {
+ alert(
+  "Whatsapp: +917262896435, Telegram: @officialarbazansari"
+ );
+}
+
+
+//text display area
+var motherbox = document
+ .getElementById("mother");
+
+
+//Typing area
+var message = document
+ .getElementById("startmsg");
+var savedms = "";
+
+//Variables
+var speak = "";
+var rate = 0;
+var pit = 0;
+var optshow = 0;
+var darkornot = 0;
+var activatebody = 0;
+var remindercontrol = "off";
+var reminde = "";
+
+//Send Button systems
+function sendit() {
+ if (message.value != "") {
+  //message
+  savedms = message.value;
+
+  //creating reply of jarvis
+  var newmsg = document
+   .createElement(
+    "div");
+  var pelement = document
+   .createElement("p");
+  var breaker = document
+   .createElement("br");
+  newmsg.setAttribute("align",
+   "right");
+  pelement.innerHTML = message.value;
+  newmsg.appendChild(pelement);
+  motherbox.appendChild(breaker);
+  motherbox.appendChild(newmsg);
+  pelement.className = "me";
+
+  motherbox.scrollTop = motherbox
+   .scrollHeight;
+  message.value = "";
+  setTimeout(receiveIt, 1000);
+ } else {
+  runSpeechRecognition();
+  /* JS comes here */
+  function runSpeechRecognition() {
+   // get output div reference
+   // new speech recognition object
+   var SpeechRecognition =
+    SpeechRecognition ||
+    webkitSpeechRecognition;
+   var recognition =
+    new SpeechRecognition();
+
+   // This runs when the speech recognition service starts
+   recognition.onstart = function() {
+    document.getElementById("mic")
+     .innerText = "•••";
+   };
+
+   recognition.onspeechend =
+    function() {
+     recognition.stop();
+    }
+
+   // This runs when the speech recognition service returns result
+   recognition.onresult = function(
+    event) {
+    var transcript = event.results[
+     0][0].transcript;
+    var confidence = event.results[
+     0][0].confidence;
+    message.value = transcript;
+    sendit();
+    document.getElementById("mic")
+     .innerText = "🎤";
+   };
+
+   // start recognition
+   recognition.start();
+  }
+ }
+ speechtext();
+}
+
+function receiveIt() {
+
+ var newmsg = document
+  .createElement(
+   "div");
+ var breaker = document
+  .createElement("br");
+ if (savedms.toLowerCase() ==
+  "open tic tac toe" || savedms
+  .toLowerCase() == "/ttt") {
+  newmsg.innerHTML =
+   "<div style='overflow:hidden;background-color:orange;border-radius:5px;width:300px; height:320px;border:none;'><iframe src='https://arbazdiary.blogspot.com/p/solve-cubic-equations.html' style='border:none; height:500px;width:300px; background-color:none;border-radius:6px;margin-top:-150px;' scrolling='no'></iframe></div>";
+  newmsg.style = "height:0px";
+  speak = "Opening tic tac toe!";
+ } else if (savedms.toLowerCase() ==
+  "open cubic solution" || savedms
+  .toLowerCase() == "/cubic") {
+  newmsg.innerHTML =
+   "<iframe src='https://myfuntools.blogspot.com/?m=1' height='240px' scrolling='no' style='border-radius:6px; border:none;background-color:rgba(0,0,0,0.1);'> </iframe>";
+  newmsg.style = "height:0px;"
+  speak = "Opening cubic solution!";
+ } else if (savedms.toLowerCase() ==
+  "what is the time" || savedms
+  .toLowerCase() == "/time") {
+  var time = new Date();
+  var h = time.getHours();
+  var m = time.getMinutes();
+
+  if (h < 12 && h != 00) {
+   m = m + " AM";
+  }
+  if (h > 12) {
+   h = h - 12;
+   m = m + " PM";
+  }
+  if (h == 00) {
+   h = 12;
+   m = m + " AM";
+  }
+  if (h < 10) {
+   h = "0" + h;
+  }
+  if (m < 10) {
+   m = "0" + m;
+  }
+
+  newmsg.innerText = h + ":" + m;
+  speak = "It's" + newmsg.innerText;
+ } else if (savedms.toLowerCase() ==
+  "tell me full time" || savedms
+  .toLowerCase() == "/fulltime") {
+  var allTime = new Date();
+  newmsg.innerText = allTime;
+  speak = newmsg.innerText;
+ } else if (savedms.substring(0, 11)
+  .toLowerCase() == "my name is " &&
+  savedms.substring(11) != "") {
+  newmsg.innerText = savedms
+   .substring(11) + "!...nice name.";
+  speak = newmsg.innerText;
+ } else if (savedms.toLowerCase() ==
+  "thanks") {
+  newmsg.innerText =
+   "Be happy... welcome!";
+  speak = newmsg.innerText;
+ } else if (savedms.toLowerCase() ==
+  "call ammi") {
+  document.getElementById("call")
+   .click();
+  newmsg.innerHTML =
+   "<a href='tel:8857056435'>Call back</a><br><a href='sms:8857056435'>SMS instead</a>";
+  speak = "Got it!";
+  rate = 0.3;
+ } else if (savedms.toLowerCase() ==
+  "enable dark mode" || savedms
+  .toLowerCase() == "/dark") {
+  darkornot = 0;
+  dark();
+  newmsg.innerText =
+   "Dark mode enabled";
+  speak = newmsg.innerText;
+ } else if (savedms.toLowerCase() ==
+  "enable light mode" || savedms
+  .toLowerCase() == "/light") {
+  darkornot = 1;
+  dark();
+  newmsg.innerText =
+   "Light mode enabled";
+  speak = newmsg.innerText;
+ } else if (remindercontrol ==
+  "on") {
+  speak = reminde;
+  remindercontrol = "off"
+  newmsg.innerText = reminde;
+ } else if (savedms.substring(0, 16)
+  .toLowerCase() ==
+  "remind me after " && savedms
+  .search("minute") >
+  0) {
+  var a = savedms.length;
+  var b = savedms.substring(0, 16);
+  var c = savedms.search("for");
+  var d = savedms.search("after");
+  var e = savedms.search("minute");
+  var f = savedms.slice(d + 6, e -
+   savedms.length);
+  var ff = f * 60 * 1000;
+
+  newmsg.innerText =
+   "I'll remind you after " + f +
+   " minutes";
+  speak = newmsg.innerText;
+
+  remindercontrol = "on";
+  reminde =
+   "Excuse me sir!, You had a reminder " +
+   f + " minutes ago";
+  setTimeout(remindon, ff);
+
+ } else {
+  newmsg.innerText =
+   "Error: Unknown command!";
+  pit = pit + 0.1;
+  speak =
+   "Sorry, I can't understand!";
+ }
+ motherbox.appendChild(breaker);
+ motherbox.appendChild(newmsg);
+ newmsg.className = "reply";
+
+ motherbox.scrollTop = motherbox
+  .scrollHeight;
+ textToAudio();
+
+}
+
+function speechtext() {
+ if (message.value == "") {
+  document.getElementById("mic")
+   .innerText = "🎤";
+ }
+ if (message.value != "") {
+  document.getElementById("mic")
+   .innerText = ">";
+ }
+}
+
+function textToAudio() {
+ let speech =
+  new SpeechSynthesisUtterance();
+ speech.lang = "en-AU";
+
+ speech.text = speak;
+ speech.volume = 1;
+ speech.rate = 0.8;
+ speech.pitch = 0.6;
+
+ window.speechSynthesis.speak(
+  speech);
+}
+
+document.getElementById("setss")
+ .style.display = "none";
+document.getElementById("turnon")
+ .style.display = "none";
+
+function openset() {
+ if (optshow == 0) {
+  document.getElementById("setss")
+   .style.display = "";
+  document.getElementById("turnon")
+   .style.display = "";
+  optshow = 1;
+  document.getElementById("setting")
+   .innerText = "✖️";
+  setTimeout(offftime, 100);
+ } else {
+  optshow = 0;
+  document.getElementById("setss")
+   .style.display = "none";
+  document.getElementById("turnon")
+   .style.display = "none";
+  document.getElementById("setting")
+   .innerText = "⚙️";
+ }
+
+}
+
+function dark() {
+ if (darkornot == 0) {
+  document.body.style =
+   "background-color:black";
+  document.querySelector(
+    ".motherclass").style =
+   "background-color:black;border:solid white;";
+  document.querySelector(".reply")
+   .style =
+   "background-color:#4e5763;color:white";
+  document.getElementById("setss")
+   .innerText = "Light mode";
+  darkornot = 1;
+ } else {
+  document.body.style =
+   "background-color:none;";
+
+  document.querySelector(
+    ".motherclass").style =
+   "background-color:lightBlue;border:solid black";
+
+  document.getElementById("setss")
+   .innerText = "Dark mode";
+  darkornot = 0;
+ }
+}
+
+function remindon() {
+ savedms = "###33";
+ receiveIt();
+}
+</script>
+</body>
+</html>
